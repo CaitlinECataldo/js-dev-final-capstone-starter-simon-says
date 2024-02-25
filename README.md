@@ -1,5 +1,26 @@
 Live site: https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/
 
+# Success Criteria
+
+Not working:
+- (done) Audio
+- (done) Point counter (beginning starts at 1)
+      - reason: no initialization originally
+- keyboard (remove when I submit project and fix after. Push to a seperate branch)
+- I will need to replace the status text with the "Select your level" text
+
+Functionality:
+- (done) The game starts when a player clicks the `start` button.
+- (done) The computer selects the pads randomly.
+- (done) The player can select a pad when it's their turn. 
+- (done) The game ends/resets when a player makes a mistake or successfully completes all the rounds of the level.
+- (done) The game is deployed to Github.
+- (done) The game presents some aspects of originality and creativity as specified in US-06.
+
+General Code Organization:
+- (done I think?) Minimal code duplication
+- (done) Comments are used to describe the functions.
+
 # Foundations for Web Development - Final Capstone (Simon Says)
 
 You've been hired as an intern at *Thinkful Game Studio*, which has decided to create a game, *Simon Says*. You will be applying all the HTML, CSS, and JavaScript skills you've learned in this course to help them build this game.
@@ -70,7 +91,7 @@ Good luck - you can do this!
 The game needs to have the basic structure for it to function, including:
 - a name for the game (done)
 - a start button (done)
-- a status message
+- a status message (done)
 - four colored pads (done)
 
 The starter code is provided for you; for this user story, you will complete the starter code to implement the rest of the basic game structure.
