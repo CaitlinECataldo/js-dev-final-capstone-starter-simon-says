@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/styles.css" />
+    <script src="https://kit.fontawesome.com/f368951971.js" crossorigin="anonymous"></script>
     <title>Simon Says</title>
   </head>
   <body>
@@ -16,20 +17,72 @@
 
       <section class="game-controls">
         <!--TODO: Add the start button -->
-        <button class="start-button js-start-button" id="center-button">Start</button>
+        <button class="start-button js-start-button" id="center-button" tabindex="0">Start</button>
+        <span class="level hidden">
+          <p style="font-size: 22px">Select your level</p>
+          <!-- <div class="level-options">
+            <div class="levels">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            </div> -->
+          <!-- </div> -->
+        </span>
         <span class="status hidden js-status">
-          
         </span>
       </section>
 
+
       <section class="pad-container unclickable js-pad-container">
-        <div class="pad pad-red js-pad-red" data-color="red"></div>
+        <div></div>
+        <div class="pad pad-red js-pad-red" data-color="red">
+          <div class="level hidden">
+          <h3>1</h3>
+        </div>
+        <i class="fa-solid fa-arrow-up arrowIcon hidden"></i>
+      </div>
+
+      <div></div>
+
+
+      <div class="pad pad-yellow js-pad-yellow" data-color="yellow">
+        <div class="level hidden">
+          <h3>4</h3>
+        </div>
+        <i class="fa-solid fa-arrow-left arrowIcon hidden"></i>
+      </div>
+      <div class="center">
+        <div class="score hidden">
+          
+        </div>
+      </div>
         <!--TODO: Add the missing pads -->
-        <div class="pad pad-green js-pad-green" data-color="green"></div>
-        <div class="pad pad-blue js-pad-blue" data-color="blue"></div>
-        <div class="pad pad-yellow js-pad-yellow" data-color="yellow"></div>
+        <div class="pad pad-blue js-pad-blue" data-color="blue">
+          <div class="level hidden">
+            <h3>2</h3>
+          </div>
+          <i class="fa-solid fa-arrow-right arrowIcon hidden"></i>
+        </div> 
+
+        <div></div>
+ 
+        <div class="pad pad-green js-pad-green" data-color="green">
+          <div class="level hidden">
+            <h3>3</h3>
+          </div>
+          <i class="fa-solid fa-arrow-down arrowIcon hidden"></i>
+        </div>
+
+        
+
+
+
+
       </section>
     </main>
+    <footer><p style="display: flex; justify-content: center; align-items: center;">Background image by <a href="https://www.freepik.com/free-vector/abstract-pixel-rain-background_6189829.htm#query=pixel%20background&position=6&from_view=keyword&track=ais&uuid=a97bc654-d6ca-4f71-86b7-fd6c9d754ea2">Freepik</a></p></footer>
     <script src="./src/index.js"></script>
+    
   </body>
 </html>
