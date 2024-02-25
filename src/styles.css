@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Pixelify+Sans:wght@700&display=swap');
+
 html {
-  background: url('../assets/background.png') no-repeat center center fixed;
+  background: url('../assets/background.jpg') no-repeat center center fixed; 
   box-sizing: border-box;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -11,23 +13,36 @@ html {
 }
 
 body {
-  color: yellow;
-  font-family: 'Rubik Microbe', sans-serif;
+  color: black;
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   display: flex;
   justify-content: center;
   height: 100vh;
   align-items: center;
+  flex-direction: column;
 }
 
-main {
-  background-color: #000;
-  padding: 40px;
+header {
+  display: flex;
 }
+
+footer {
+  color: white;
+  font-size: 10px;
+};
 
 h1 {
   text-align: center;
   font-size: 40px;
 }
+
+.js-heading {
+  display: flex;
+  margin: 0px auto 30px auto;
+}
+
 
 .game-controls {
   text-align: center;
@@ -37,15 +52,18 @@ h1 {
   display: inline-block;
   height: 38px;
   padding: 0 30px;
-  color: yellow;
+  background-color: #235789 !important;
+  color: #FDFFFC;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   background-color: transparent;
-  border: 1px solid yellow;
+  border: 1px solid #235789;
+  border-radius: 10px;
   cursor: pointer;
 }
+
 
 #center-button {
   display: flex;
@@ -54,96 +72,219 @@ h1 {
 }
 
 .start-button:hover {
-  color: greenyellow;
   font-size: 18px;
-  border-color: greenyellow;
   transform: rotate(5deg);
 }
 
-.status {
+.status, .level-selector {
   font-size: 22px;
 }
 
-.pad-container {
-  display: grid;
-  grid-template-rows: 200px 200px;
-  grid-template-columns: 200px 200px;
-  grid-gap: 5px;
-  margin: 20px;
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
 }
 
-.pad-red {
-  background-color: red;
-  border-top-left-radius: 200px;
-}
+/* Mobile design */
+@media (max-width: 767px) {
+  main {
+    background-color: #fdfffceb;
+    padding: 40px;
+    width: 300px;
+    height: 100%;
+  }
+  
+  .arrowIcon {
+    display: none !important;
+  }
+  .pad-container {
+    display: grid;
+    grid-gap: 10px;
+    margin: 20px;
+    grid-template-rows: auto auto auto auto;
+  }
+  
+  .pad {
+    color: white;
+    font-size: 22px;
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pad-red {
+    background-color: #235789;
+    grid-row: 1;
+  }
+  
+  .pad-red:active,
+  .pad-red.activated {
+    background-color: #7DAFDE;
+    transform: translateY(10px);
+  }
+  
+  .pad-green {
+    background-color: #C1292E;
+    grid-row: 3;
+  }
+  
 
+  
+  .pad-green:active,
+  .pad-green.activated {
+    background-color: #E7888C;
+    transform: translateY(10px);
+  }
+  
+  .pad-yellow {
+    background-color: #09814A;
+    grid-row: 4;
+  }
 
-
-.pad-red:hover,
-.pad-red:focus {
-  background-color: #ff451a;
-  transform: rotate(-5deg);
-}
-
-.pad-red:active,
-.pad-red.activated {
-  background-color: #ff5c36;
-  transform: translateY(10px);
-}
-
-.pad-green {
-  border-top-right-radius: 200px;
-  background-color: green;
-}
-
-.pad-green:hover,
-.pad-green:focus {
-  background-color: #8cc218;
-  transform: rotate(5deg);
-}
-
-.pad-green:active,
-.pad-green.activated {
-  background-color: #a0ea00;
-  transform: translateY(10px);
-}
-
-.pad-yellow {
-  border-bottom-right-radius: 200px;
-  background-color: yellow;
-}
-
-.pad-yellow:hover,
-.pad-yellow:focus {
-  background-color: #ffb900;
-  transform: rotate(5deg);
-}
-
-.pad-yellow:active,
-.pad-yellow.activated {
-  background-color: #ffca3d;
-  transform: translateY(10px);
-}
-
-.pad-blue {
-  border-bottom-left-radius: 200px;
-  background-color: blue;
-}
-
-.pad-blue:hover,
-.pad-blue:focus {
-  background-color: #139ddd;
-  transform: rotate(5deg);
-}
+  .pad-yellow:active,
+  .pad-yellow.activated {
+    background-color: #0C9759;
+    transform: translateY(10px);
+  }
+  
+  .pad-blue {
+    background-color: #A01A7D;
+    grid-row: 2;
+  }
 
 .pad-blue:active,
 .pad-blue.activated {
-  background-color: #2bbcff;
+  background-color: #E561C2;
   transform: translateY(10px);
 }
 
 .hidden {
   display: none !important;
+}  
+}
+
+@media (min-width: 768px) {
+  main {
+    background-color: #fdfffceb;
+    padding: 40px;
+  }
+  
+  .pad-container {
+    display: grid;
+    grid-template-rows: 100px 200px 100px;
+    grid-template-columns: 200px 200px 200px;
+    grid-gap: 10px;
+    margin: 20px;
+  }
+  
+  .pad {
+    color: white;
+    font-size: 22px;
+    display: flex;
+  
+  }
+  
+  .pad-red {
+    background-color: #235789;
+    clip-path: polygon(
+      50% 0%,
+      100% 100%,
+      0% 100%
+    );
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  
+  .pad-red:hover,
+  .pad-red:focus {
+    background-color: #9EC3E6;
+    transform: rotate(-5deg);
+  }
+  
+  .pad-red:active,
+  .pad-red.activated {
+    background-color: #7DAFDE;
+    transform: translateY(10px);
+  }
+  
+  .pad-green {
+    background-color: #C1292E;
+    clip-path: polygon(
+      50% 100%,
+      100% 0%,
+      0% 0%
+    );
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pad-green:hover,
+  .pad-green:focus {
+    background-color: #EA9A9D;
+    transform: rotate(5deg);
+  }
+  
+  .pad-green:active,
+  .pad-green.activated {
+    background-color: #E7888C;
+    transform: translateY(10px);
+  }
+  
+  .pad-yellow {
+    background-color: #09814A;
+    clip-path: polygon(
+      50% 50%,
+      100% 0%,
+      100% 100%
+    );
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 16%;
+  }
+  
+  .pad-yellow:hover,
+  .pad-yellow:focus {
+    background-color: #66F4B4;
+    transform: rotate(5deg);
+  }
+  
+  .pad-yellow:active,
+  .pad-yellow.activated {
+    background-color: #0C9759;
+    transform: translateY(10px);
+  }
+  
+  .pad-blue {
+    background-color: #A01A7D;
+    clip-path: polygon(
+      0% 100%,
+      0% 0%,
+      50% 50%
+    );
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 16%;
+  }
+  .hidden {
+    display: none !important;
+  }
+
+  .pad-blue:hover,
+.pad-blue:focus {
+  background-color: #EB84D0;
+  transform: rotate(5deg);
+}
+
+.pad-blue:active,
+.pad-blue.activated {
+  background-color: #E561C2;
+  transform: translateY(10px);
+}
 }
 
 .unclickable {
