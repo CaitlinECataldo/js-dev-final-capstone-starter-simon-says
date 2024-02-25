@@ -181,7 +181,6 @@ function levelHandler(event) {
   );
   roundCount++;
   showArrowIcons();
-  totalPoints = 0;
   scoreSelector.classList.remove("hidden");
   playComputerTurn();
   playing = "computer";
@@ -467,6 +466,7 @@ function checkPress(color) {
 
  let remainingPresses = computerSequence.length - playerSequence.length;
  setText(statusSpan,  `Players Turn: ${remainingPresses} ${pressGrammar(remainingPresses)} Left`);
+
  for (let i = 0; i < pads.length; i++) {
    if (color === pads[i].color) {
      index = i;
@@ -477,10 +477,12 @@ function checkPress(color) {
  
    if (computerSequence[i] != playerSequence[i]) {
     failureMusic.play();
+    
     resetGame("Wrong!!!");
    } 
  }
-
+ totalPoints = totalPoints + 1;
+ scoreSelector.innerText = `Total Points: ${totalPoints}`;
  console.log(totalPoints);
 
  
@@ -489,8 +491,6 @@ function checkPress(color) {
  if (remainingPresses === 0) {
    checkRound()
  }
- totalPoints = totalPoints + 1;
- scoreSelector.innerText = `Total Points: ${totalPoints}`;
 }
 
 /**
@@ -539,6 +539,7 @@ function resetGame(text) {
  playerSequence = [];
  roundCount = [];
  level = 0;
+ totalPoints = 0;
 //  totalPoints = 0;
  // Uncomment the code below:
  alert(text);
@@ -547,7 +548,6 @@ function resetGame(text) {
  statusSpan.classList.add("hidden");
  startButton.classList.remove("hidden");
  arrowIcons.forEach((arrow) => {arrow.classList.add("hidden")});
- totalPoints = 0;
  scoreSelector.classList.add("hidden");
  gameOver = true;
 }
