@@ -7,6 +7,7 @@ const startButton = document.querySelector(".js-start-button");
 const statusSpan = document.querySelector(".js-status"); // Use querySelector() to get the status element
 const heading = document.querySelector(".js-heading"); // Use querySelector() to get the heading element
 const padContainer = document.querySelector(".js-pad-container"); // Use querySelector() to get the heading element
+const levelSelector = document.querySelectorAll(".level");
 /**
 * VARIABLES
 */
@@ -14,6 +15,13 @@ let computerSequence = []; // track the computer-generated sequence of pad press
 let playerSequence = []; // track the player-generated sequence of pad presses
 let maxRoundCount = 0; // the max number of rounds, varies with the chosen level
 let roundCount = 0; // track the number of rounds that have been played so far
+let level = 0; //  this is the level set by the human player
+let playing = ""; // tracks if the human or computer played last
+let successMusic = new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/cartoon_success_fanfair.mp3"); // sound played when all rounds are successfully completed (Sound from Zapsplat.com)
+let failureMusic = new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/multimedia_game_sound_synth_tone_bold_fail_52993.mp3"); // sound played when the game is lost (Sound from Zapsplat.com)
+let arrowIcons = document.querySelectorAll(".arrowIcon");
+let totalPoints = 0; // tracks the total number of points (correct clicks)
+let scoreSelector = document.querySelector(".score");
 
 
 /**
@@ -31,38 +39,78 @@ let roundCount = 0; // track the number of rounds that have been played so far
 *
 */
 
+
 const pads = [
  {
    color: "red",
    selector: document.querySelector(".js-pad-red"),
-   sound: new Audio("../assets/simon-says-sound-1.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-1.mp3"),
  },
  // TODO: Add the objects for the green, blue, and yellow pads. Use object for the red pad above as an example.
  {
    color: "green",
    selector: document.querySelector(".js-pad-green"),
-   sound: new Audio("../assets/simon-says-sound-2.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-2.mp3"),
  },
  {
    color: "blue",
    selector: document.querySelector(".js-pad-blue"),
-   sound: new Audio("../assets/simon-says-sound-3.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-3.mp3"),
  },
  {
    color: "yellow",
    selector: document.querySelector(".js-pad-yellow"),
-   sound: new Audio("../assets/simon-says-sound-4.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-4.mp3"), 
  }
 ];
 
+// Holds all of the values for arrow keys and icons
+
+let arrows = [
+  {
+    direction: "left",
+    keyCode: 37,
+    button: document.querySelector(".js-pad-yellow"),
+    color: "#09814A",
+    holdColor: "#0C9759",
+    class: ".js-pad-yellow"}, 
+  {
+    direction: "top",
+    keyCode: 38, 
+    button: document.querySelector(".js-pad-red"),
+    color: "#235789",
+    holdColor: "#7DAFDE",
+    class: ".js-pad-red"},
+  {
+    direction: "right",
+    keyCode: 39,
+    button: document.querySelector(".js-pad-blue"),
+    color: "#A01A7D",
+    holdColor: "#E561C2",
+    class: ".js-pad-blue"}, 
+  {
+    direction: "down",
+    keyCode: 40,
+    button: document.querySelector(".js-pad-green"),
+    color: "#C1292E",
+    holdColor: "#E7888C",
+    class: ".js-pad-green"}];
+
 
 /**
-* EVENT LISTENERS
+* EVENT LISTENERSs
 */
 
 padContainer.addEventListener("click", padHandler);
 // TODO: Add an event listener `startButtonHandler()` to startButton.
-startButton.addEventListener("click",startButtonHandler)
+startButton.addEventListener("click",startButtonHandler);
+
+padContainer.addEventListener("click", levelHandler);
+
+document.addEventListener('keyup', keyClick);
+document.addEventListener('keydown', holdPad);
+
+
 //  * EVENT HANDLERS
 //  */ 
 
@@ -84,13 +132,68 @@ startButton.addEventListener("click",startButtonHandler)
 
 function startButtonHandler() {
  // TODO: Write your code here.
- setLevel();
- roundCount++;
+ playing = "human";
+ gameOver = false;
+ updateTotalPointsDisplay();
+ levelSelector.forEach((level) => {
+  level.classList.remove("hidden");
+ });
 startButton.classList.add("hidden");
-statusSpan.classList.remove("hidden");
-playComputerTurn();
+padContainer.classList.remove("unclickable");
+
+
  return { startButton, statusSpan };
 }
+
+// Allows pads to be selected by key
+function keyClick(event) {
+  let key = event.keyCode;
+  arrows.forEach((arrow) => {
+  if(parseFloat(arrow.keyCode) === key) {
+    arrow.button.classList.remove("activated");
+    arrow.button.click();
+  }
+  });
+}
+
+// This function displays the code for innertext score
+function updateTotalPointsDisplay() {
+  scoreSelector.innerText = `Total Points: ${totalPoints}`;
+}
+
+// This function is called when an arrow is held down. It will change the hover color of the selected pad.
+function holdPad(event) {
+  let key = event.keyCode;
+  arrows.forEach((arrow) => {
+    if (parseFloat(arrow.keyCode) === key) {
+      arrow.button.classList.add("activated");
+      // arrow.button.style.backgroundColor = arrow.holdColor;
+    }
+  });
+};
+
+
+// Called when a pad is clicked. Sets the level chosen by the human after start.
+function levelHandler(event) {
+  if (playing === "human") {
+    statusSpan.classList.remove("hidden");
+    
+    if (level === 0) {
+      level = parseFloat(event.target.innerText);
+  setLevel(level);
+  levelSelector.forEach((selector) => {
+    selector.classList.add("hidden");
+  }
+  );
+  roundCount++;
+  showArrowIcons();
+  scoreSelector.classList.remove("hidden");
+  playComputerTurn();
+  playing = "computer";
+    }
+  }
+}
+
 
 /**
 * Called when one of the pads is clicked.
@@ -113,18 +216,33 @@ playComputerTurn();
 // Why does the function below yield the following error: "DOMException: The element has no supported sources." ?
 
 function padHandler(event) {
- 
- const { color } = event.target.dataset;
- if (!color) return;
- // TODO: Write your code here.
- let pad = pads.find(pad => pad.color === color);
- if (pad) {
-  //  pad.sound.play();
-   checkPress(color);
- }
- 
- return color;
+let selectedLevel = parseFloat(event.target.innerText);
+if (level === 0) { 
+  setLevel(selectedLevel);
+  levelHandler; } 
+
+  
+if (level > 0) {
+    const { color } = event.target.dataset;
+  if (!color) return;
+  // TODO: Write your code here.
+  let pad = pads.find(pad => pad.color === color);
+  if (pad) {
+    pad.sound.play();
+    checkPress(color);
+  }
+  return color;
+  }
 }
+
+// This function shows the arrow icons on the pads
+function showArrowIcons() {
+  arrowIcons.forEach((arrow) => {
+   arrow.classList.remove("hidden");
+   console.log(arrow);
+  })
+}
+
 
 /**
 * HELPER FUNCTIONS
@@ -151,24 +269,25 @@ function padHandler(event) {
 * setLevel(8) //> returns "Please enter level 1, 2, 3, or 4";
 *
 */
-function setLevel(level = 1) {
- // TODO: Write your code here. 
- if (level > 4 || level < 0) {
-   return "Please enter level 1, 2, 3, or 4";
- } else if (!level || level === 1) {
-   maxRoundCount = 8;
-   return 8;
- } else if (level === 2) {
-   maxRoundCount = 14;
-   return 14;
- } else if (level === 3) {
-   maxRoundCount = 20;
-   return 20;
- } else if (level === 4) {
-   maxRoundCount = 31;
-   return 31;
- } 
-}
+function setLevel(level) {
+  if (level > 4 || level < 1 || isNaN(level)) {
+ throw new Error("Please enter level 1, 2, 3, or 4");
+  }
+ switch (level) {
+ case 1:
+ maxRoundCount = 8;
+ break;
+ case 2:
+ maxRoundCount = 14;
+ break;
+ case 3:
+ maxRoundCount = 20;
+ break;
+ case 4:
+ maxRoundCount = 31;
+ break;
+  }
+ }
 
 /**
 * Returns a randomly selected item from a given array.
@@ -196,9 +315,10 @@ function getRandomItem(collection) {
 /**
 * Sets the status text of a given HTML element with a given a message
 */
+
 function setText(element, text) {
  // TODO: Write your code here.
- element.innerText = text;
+ element.textContent = text;
  return element;
 }
 
@@ -220,7 +340,7 @@ function activatePad(color) {
  let pad = pads.find(pad => pad.color === color);
  // let padClass = document.querySelector(`.pad-${pad.color}`);
  pad.selector.classList.add("activated"); 
- // pad.sound.play();
+ pad.sound.play();
  setTimeout(() => {
    pad.selector.classList.remove("activated");
  }, 500);
@@ -276,23 +396,22 @@ function activatePads(sequence) {
 * to the current round (roundCount) multiplied by 600ms which is the duration for each pad in the
 * sequence.
 */
-
-
 function playComputerTurn() {
  // TODO: Write your code here.
- padContainer.classList.add("unclickable");
- setText(statusSpan,"The computer's turn...");
- setText(heading, `Round ${roundCount} of ${maxRoundCount}` );
- 
-   computerSequence.push(getRandomItem(pads).color);
- 
- 
- 
- activatePads(computerSequence);
- console.log("computerSequence: ",computerSequence);
- setTimeout(() => playHumanTurn(roundCount), roundCount * 600 + 1000); // 5
-}
 
+
+
+  padContainer.classList.add("unclickable");
+  setText(statusSpan,"The computer's turn...");
+  setText(heading, `Round ${roundCount} of ${maxRoundCount}` );
+  computerSequence.push(getRandomItem(pads).color);
+  activatePads(computerSequence);
+
+  setTimeout(() => playHumanTurn(roundCount), roundCount * 600 + 1000); // 5
+
+ playing = "human";
+}
+// Displays the correct version of press or presses within the statusSpan based on how many clicks are left
 function pressGrammar(pressesLeft) {
  let pressGrammar = "Presses";
  if (pressesLeft === 1) {
@@ -315,6 +434,7 @@ function playHumanTurn() {
  padContainer.classList.remove("unclickable");
  setText(statusSpan, `Players Turn: ${clicksLeft} ${pressGrammar(clicksLeft)} Left`);
  clicksLeft = clicksLeft - 1;
+ playing = "computer"; 
 }
 
 /**
@@ -340,27 +460,34 @@ function playHumanTurn() {
 **/
 function checkPress(color) {
  // TODO: Write your code here.
+
  let index = 0;
  let buttonsPressed = playerSequence.length;
  playerSequence.push(color);
+
+ let remainingPresses = computerSequence.length - playerSequence.length;
+ setText(statusSpan,  `Players Turn: ${remainingPresses} ${pressGrammar(remainingPresses)} Left`);
+
  for (let i = 0; i < pads.length; i++) {
    if (color === pads[i].color) {
      index = i;
    }
  }
 
- for (let i = 0; i < buttonsPressed; i++) {
-   
-   console.log("playerSequence: ", playerSequence);
-   if (computerSequence[i] != playerSequence[i]) {
-     resetGame("Wrong!!!");
-   } 
+ for (let i = 0; i <= buttonsPressed; i++) {
+ 
+  if (computerSequence[i] != playerSequence[i]) {
+    failureMusic.play();
+    resetGame("Wrong!!!");
+   } else if (computerSequence[i] = playerSequence[i]) {
+    totalPoints = totalPoints + 1;
+    updateTotalPointsDisplay();
+    console.log("checkPress(color) totalPoints: ",totalPoints);
+  }
  }
 
- let remainingPresses = computerSequence.length - playerSequence.length;
- setText(statusSpan,  `Players Turn: ${remainingPresses} ${pressGrammar(remainingPresses)} Left`);
+
  if (remainingPresses === 0) {
-  console.log("Checking to see if you're done with round...");
    checkRound()
  }
 }
@@ -382,13 +509,17 @@ function checkPress(color) {
 
 function checkRound() {
  // TODO: Write your code here.
+
  if (playerSequence.length === maxRoundCount) {
+  successMusic.play();
    resetGame("You crushed this game! Congrats!!");
+ } else if (gameOver === true ) {
+  return
  } else {
    (statusSpan, `Nice! Keep going!`);
    roundCount ++;
    playerSequence = [];
-   setTimeout(() => {playComputerTurn(), console.log("Playing again!")}, 1000);
+   setTimeout(() => {playComputerTurn()}, 1000);
  }
 }
 
@@ -406,12 +537,18 @@ function resetGame(text) {
  computerSequence = [];
  playerSequence = [];
  roundCount = [];
+ level = 0;
+ totalPoints = 0;
+//  totalPoints = 0;
  // Uncomment the code below:
  alert(text);
  setText(heading, "Simon Says");
- startButton.classList.remove("hidden");
- statusSpan.classList.add("hidden");
  padContainer.classList.add("unclickable");
+ statusSpan.classList.add("hidden");
+ startButton.classList.remove("hidden");
+ arrowIcons.forEach((arrow) => {arrow.classList.add("hidden")});
+ scoreSelector.classList.add("hidden");
+ gameOver = true;
 }
 
 /**
@@ -439,3 +576,5 @@ window.playHumanTurn = playHumanTurn;
 window.checkPress = checkPress;
 window.checkRound = checkRound;
 window.resetGame = resetGame;
+window.successMusic = successMusic;
+window.failureMusic = failureMusic;
