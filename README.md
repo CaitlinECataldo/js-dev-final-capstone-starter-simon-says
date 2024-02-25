@@ -2,6 +2,13 @@ Live site: https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon
 
 # Success Criteria
 
+Not working:
+- (done) Audio
+- (done) Point counter (beginning starts at 1)
+      - reason: no initialization originally
+- keyboard (remove when I submit project and fix after. Push to a seperate branch)
+- I will need to replace the status text with the "Select your level" text
+
 Functionality:
 - (done) The game starts when a player clicks the `start` button.
 - (done) The computer selects the pads randomly.

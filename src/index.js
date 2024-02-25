@@ -17,8 +17,8 @@ let maxRoundCount = 0; // the max number of rounds, varies with the chosen level
 let roundCount = 0; // track the number of rounds that have been played so far
 let level = 0; //  this is the level set by the human player
 let playing = ""; // tracks if the human or computer played last
-let successMusic = new Audio(".../assets/cartoon_success_fanfair.mp3"); // sound played when all rounds are successfully completed (Sound from Zapsplat.com)
-let failureMusic = new Audio(".../assets/multimedia_game_sound_synth_tone_bold_fail_52993.mp3"); // sound played when the game is lost (Sound from Zapsplat.com)
+let successMusic = new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/cartoon_success_fanfair.mp3"); // sound played when all rounds are successfully completed (Sound from Zapsplat.com)
+let failureMusic = new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/multimedia_game_sound_synth_tone_bold_fail_52993.mp3"); // sound played when the game is lost (Sound from Zapsplat.com)
 let arrowIcons = document.querySelectorAll(".arrowIcon");
 let totalPoints = 0; // tracks the total number of points (correct clicks)
 let scoreSelector = document.querySelector(".score");
@@ -44,23 +44,23 @@ const pads = [
  {
    color: "red",
    selector: document.querySelector(".js-pad-red"),
-   sound: new Audio("../assets/simon-says-sound-1.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-1.mp3"),
  },
  // TODO: Add the objects for the green, blue, and yellow pads. Use object for the red pad above as an example.
  {
    color: "green",
    selector: document.querySelector(".js-pad-green"),
-   sound: new Audio("../assets/simon-says-sound-2.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-2.mp3"),
  },
  {
    color: "blue",
    selector: document.querySelector(".js-pad-blue"),
-   sound: new Audio("../assets/simon-says-sound-3.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-3.mp3"),
  },
  {
    color: "yellow",
    selector: document.querySelector(".js-pad-yellow"),
-   sound: new Audio("../assets/simon-says-sound-4.mp3"),
+   sound: new Audio("https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/assets/simon-says-sound-4.mp3"), 
  }
 ];
 
@@ -134,6 +134,7 @@ function startButtonHandler() {
  // TODO: Write your code here.
  playing = "human";
  gameOver = false;
+ updateTotalPointsDisplay();
  levelSelector.forEach((level) => {
   level.classList.remove("hidden");
  });
@@ -153,6 +154,11 @@ function keyClick(event) {
     arrow.button.click();
   }
   });
+}
+
+// This function displays the code for innertext score
+function updateTotalPointsDisplay() {
+  scoreSelector.innerText = `Total Points: ${totalPoints}`;
 }
 
 // This function is called when an arrow is held down. It will change the hover color of the selected pad.
@@ -264,24 +270,24 @@ function showArrowIcons() {
 *
 */
 function setLevel(level) {
- // TODO: Write your code here. 
-
- if (level > 4 || level < 0) {
-   return "Please enter level 1, 2, 3, or 4";
- } else if (!level || level === 1) {
-   maxRoundCount = 8;
-   return 8;
- } else if (level === 2) {
-   maxRoundCount = 14;
-   return 14;
- } else if (level === 3) {
-   maxRoundCount = 20;
-   return 20;
- } else if (level === 4) {
-   maxRoundCount = 31;
-   return 31;
- } 
-}
+  if (level > 4 || level < 1 || isNaN(level)) {
+ throw new Error("Please enter level 1, 2, 3, or 4");
+  }
+ switch (level) {
+ case 1:
+ maxRoundCount = 8;
+ break;
+ case 2:
+ maxRoundCount = 14;
+ break;
+ case 3:
+ maxRoundCount = 20;
+ break;
+ case 4:
+ maxRoundCount = 31;
+ break;
+  }
+ }
 
 /**
 * Returns a randomly selected item from a given array.
@@ -309,9 +315,10 @@ function getRandomItem(collection) {
 /**
 * Sets the status text of a given HTML element with a given a message
 */
+
 function setText(element, text) {
  // TODO: Write your code here.
- element.innerText = text;
+ element.textContent = text;
  return element;
 }
 
@@ -393,20 +400,14 @@ function playComputerTurn() {
  // TODO: Write your code here.
 
 
- if (level > 0) {
+
   padContainer.classList.add("unclickable");
   setText(statusSpan,"The computer's turn...");
   setText(heading, `Round ${roundCount} of ${maxRoundCount}` );
-  
-  
-    computerSequence.push(getRandomItem(pads).color);
-  
-  
-  
+  computerSequence.push(getRandomItem(pads).color);
   activatePads(computerSequence);
 
   setTimeout(() => playHumanTurn(roundCount), roundCount * 600 + 1000); // 5
- }
 
  playing = "human";
 }
@@ -475,17 +476,15 @@ function checkPress(color) {
 
  for (let i = 0; i <= buttonsPressed; i++) {
  
-   if (computerSequence[i] != playerSequence[i]) {
+  if (computerSequence[i] != playerSequence[i]) {
     failureMusic.play();
-    
     resetGame("Wrong!!!");
-   } 
+   } else if (computerSequence[i] = playerSequence[i]) {
+    totalPoints = totalPoints + 1;
+    updateTotalPointsDisplay();
+    console.log("checkPress(color) totalPoints: ",totalPoints);
+  }
  }
- totalPoints = totalPoints + 1;
- scoreSelector.innerText = `Total Points: ${totalPoints}`;
- console.log(totalPoints);
-
- 
 
 
  if (remainingPresses === 0) {
