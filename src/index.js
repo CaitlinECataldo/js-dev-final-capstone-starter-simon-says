@@ -107,6 +107,7 @@ startButton.addEventListener("click",startButtonHandler);
 
 padContainer.addEventListener("click", levelHandler);
 
+// Listens for keyboard arrow clicks
 document.addEventListener('keyup', keyClick);
 document.addEventListener('keydown', holdPad);
 
@@ -129,7 +130,9 @@ document.addEventListener('keydown', holdPad);
 *
 */
 
-
+// The functionality of startButtonHandler() has changed slightly. 
+// playComputerTurn() and setLevel() are called in the function levelHandler() rather than being called in startButtonHandler(). 
+// This change was a result of feature enhancement that allow the user to select their level.
 function startButtonHandler() {
  // TODO: Write your code here.
  playing = "human";
@@ -140,6 +143,7 @@ function startButtonHandler() {
  });
 startButton.classList.add("hidden");
 padContainer.classList.remove("unclickable");
+statusSpan.classList.remove("hidden");
 
 
  return { startButton, statusSpan };
@@ -269,12 +273,12 @@ function showArrowIcons() {
 * setLevel(8) //> returns "Please enter level 1, 2, 3, or 4";
 *
 */
-function setLevel(level) {
+function setLevel(level = 1) {
   if (level > 4 || level < 1 || isNaN(level)) {
- throw new Error("Please enter level 1, 2, 3, or 4");
+ return "Please enter level 1, 2, 3, or 4";
   }
  switch (level) {
- case 1:
+  case 1:
  maxRoundCount = 8;
  break;
  case 2:
@@ -287,7 +291,10 @@ function setLevel(level) {
  maxRoundCount = 31;
  break;
   }
+  return maxRoundCount;
  }
+
+ console.log("invalid error string: ",typeof setLevel(8));
 
 /**
 * Returns a randomly selected item from a given array.
