@@ -1,5 +1,8 @@
 Live site: https://caitlinecataldo.github.io/js-dev-final-capstone-starter-simon-says/
 
+# Important Notes
+The functionality of startButtonHandler() has changed slightly. playComputerTurn() and setLevel() are called in the function levelHandler() rather than being called in startButtonHandler(). This change was a result of feature enhancements that allow the user to select their level (as specified in US-06 section 3).
+
 # Success Criteria
 
 Not working:
