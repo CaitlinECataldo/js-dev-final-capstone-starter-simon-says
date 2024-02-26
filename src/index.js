@@ -132,7 +132,7 @@ document.addEventListener('keydown', holdPad);
 
 // The functionality of startButtonHandler() has changed slightly. 
 // playComputerTurn() and setLevel() are called in the function levelHandler() rather than being called in startButtonHandler(). 
-// This change was a result of feature enhancement that allow the user to select their level.
+// This change was a result of feature enhancements that allow the user to select their level (referencing US-06 section 3)
 function startButtonHandler() {
  // TODO: Write your code here.
  playing = "human";
