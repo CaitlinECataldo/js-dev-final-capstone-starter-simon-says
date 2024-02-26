@@ -552,6 +552,7 @@ function resetGame(text) {
  setText(heading, "Simon Says");
  padContainer.classList.add("unclickable");
  statusSpan.classList.add("hidden");
+ setText(statusSpan, "Select a level");
  startButton.classList.remove("hidden");
  arrowIcons.forEach((arrow) => {arrow.classList.add("hidden")});
  scoreSelector.classList.add("hidden");
